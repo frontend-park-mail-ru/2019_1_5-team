@@ -532,6 +532,7 @@ export default class Game {
     }
 
     moveGhost(ghost: { x: number; speed: number; }, dt: number) {
+        dt *= 1000 / 975;
         ghost.x += ghost.speed * dt;
     }
 
