@@ -447,7 +447,7 @@ export default class Game {
                 this.ctx.drawImage(this.ghostRightImg,
                     this.state.ghosts[i].x, this.axisY - this.ghostRightImg.height);
 
-                this.ctx.clearRect(this.state.Players[1].x + this.playerImg.width / 2,
+                this.ctx.clearRect(this.canvas.width / 2,
                     this.axisY - this.ghostRightImg.height - symbolImgWidth - this.symbolsOffset,
                     this.canvas.width / 2, symbolImgWidth);
                 for (let j = 0; j < this.state.ghosts[i].symbols.length; j++) {
