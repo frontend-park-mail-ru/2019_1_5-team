@@ -16,6 +16,7 @@ export default class Game {
     protected canvas: HTMLCanvasElement;
     protected ctx: CanvasRenderingContext2D;
     protected ws: Ws;
+    protected isSet?: Boolean;
 
     protected axisY: number;
     protected heartsBlockY: number;
@@ -30,13 +31,12 @@ export default class Game {
                 symbols?:Array<number>, sprite: any, damage: number}>, 
                 score?: number, gameTime: number, isGameOver: Boolean
             };
-
-    oldState: {     Players?: Array<{sprite: any, x: number, id: Number, hp: number, score: Number}>,
-                    player?: {sprite: any, x: number, hp: number},
-                    ghosts: Array<{x: number, speed: number, symbolsQueue?: Array<number>,
-                    symbols?:Array<number>, sprite: any, damage: number}>,
-                    score?: number, gameTime: number, isGameOver: Boolean
-    };
+    oldState: {    Players?: Array<{sprite: any, x: number, id: Number, hp: number, score: Number}>, 
+            player?: {sprite: any, x: number, hp: number}, 
+            ghosts: Array<{x: number, speed: number, symbolsQueue?: Array<number>, 
+            symbols?:Array<number>, sprite: any, damage: number}>, 
+            score?: number, gameTime: number, isGameOver: Boolean
+        };
 
     protected recognizer: Recognizer;
     protected requestID: any;
@@ -73,6 +73,7 @@ export default class Game {
         this.symbolsOffset = this.canvas.height / 12;  // расстояние между призраком и символами над его головой
 
         this.lastDrawing = 0;
+        this.isSet = false;
 
         this.recognizer = new Recognizer();
 
@@ -121,16 +122,6 @@ export default class Game {
         }
     }
 
-    setOldState() {
-        var executed = false;
-        return function() {
-            if (!executed) {
-                this.Game.oldState = this.Game.state;
-                executed = true;
-            }
-        };
-    }
-
     setState(state: { Players: { score: Number, x?: number, id?: Number, hp?: number }[]; Objects: { items: any; }; }) {
         console.log(state);
 
@@ -153,16 +144,11 @@ export default class Game {
             isGameOver: false
         };
 
-        this.setOldState();
-
-        if (this.oldState !== undefined) {
-            for (let i = 0; i < this.state.ghosts.length; i++) {
-                if (Math.abs(this.oldState.ghosts[i].x - this.state.ghosts[i].x) >= this.deltaX) {
-                    this.oldState = this.state;
-                }
-            }
+        if (!this.isSet) {
+            this.oldState = this.state;
+            this.isSet = true;
         }
-
+        
         this.gameLoop();
     }
 
