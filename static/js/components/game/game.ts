@@ -154,14 +154,14 @@ export default class Game {
     }
 
     gameLoop(): void {
-        let now = Date.now();
-        let dt = (now - this.lastTime) / 1000.0;
+        let now = Date.now() / 1000.0;
+        let dt = (now - this.lastTime);
 
         if (!this.isMulti) {
             this.updateSingle(dt);
             this.renderSingle();
         } else {
-            this.renderMulti();
+            this.renderMulti(dt);
         }
 
         if (this.state.isGameOver === true) {
@@ -229,7 +229,7 @@ export default class Game {
             if (this.state.ghosts.length !== 0) {
                 if (this.state.ghosts[i].speed > 0) {
                     if (this.state.ghosts[i].x + this.state.ghosts[i].sprite.width < this.state.player.x) {
-                        this.moveGhost(this.state.ghosts[i], dt);
+                        this.moveGhost(this.state.ghosts[i], dt);  // тут тут тут
                     } else {
                         this.state.player.hp -= this.state.ghosts[i].damage;
                         this.state.ghosts.splice(i, 1);
@@ -355,7 +355,7 @@ export default class Game {
         }
     }
 
-    renderMulti(): void {
+    renderMulti(dt: number): void {
         /*
          * Блок первого игрока
          */
@@ -372,11 +372,10 @@ export default class Game {
         this.state.Players[0].x = leftPlayerX;
 
         this.ctx.clearRect(leftPlayerX, this.axisY - this.state.Players[0].sprite.height,
-            this.state.Players[0].sprite.width, 
-            this.state.Players[0].sprite.height);
+            this.playerImg.width, this.playerImg.height);
 
-        this.ctx.drawImage(this.state.Players[0].sprite, leftPlayerX,
-            this.axisY - this.state.Players[0].sprite.height);
+        this.ctx.drawImage(this.playerImg, leftPlayerX,
+            this.axisY - this.playerImg.height);
 
         /*
          * Блок второго игрока
@@ -392,17 +391,18 @@ export default class Game {
         }
 
         // позиция игрока
-        let rightPlayerX = leftPlayerX + this.state.Players[0].sprite.width;
+        let rightPlayerX = leftPlayerX + this.playerImg.width;
         this.state.Players[1].x = rightPlayerX;
 
-        this.ctx.clearRect(rightPlayerX, this.axisY - this.state.Players[1].sprite.height,
-            this.state.Players[1].sprite.width, 
-            this.state.Players[1].sprite.height);
+        this.ctx.clearRect(rightPlayerX, this.axisY - this.playerImg.height,
+            this.playerImg.width, this.playerImg.height);
             
-        this.ctx.drawImage(this.state.Players[1].sprite, rightPlayerX,
-            this.axisY - this.state.Players[1].sprite.height);
+        this.ctx.drawImage(this.playerImg, rightPlayerX,
+            this.axisY - this.playerImg.height);
+
 
         for (let i = 0; i < this.state.ghosts.length; i++) {  // призраки
+            this.moveGhost(this.state.ghosts[i], dt);
             let leftSymbolOffset = (this.ghostLeftImg.width / 2 - (this.state.ghosts[i].symbols.length * symbolImgWidth) / 2);
 
             if (this.state.ghosts[i].speed > 0) {
@@ -439,6 +439,7 @@ export default class Game {
                     }
                 }
             } else if (this.state.ghosts[i].speed < 0) {  // все то же самое, только для призрака справа
+
                 this.ctx.clearRect(this.state.Players[1].x + this.playerImg.width,
                     this.axisY - this.ghostRightImg.height,
                     this.canvas.width / 2, this.ghostRightImg.height);
@@ -538,13 +539,13 @@ export default class Game {
      *  Конвертирует координаты с бэка
      *  под текущую ширину канваса (экрана)
      */
-    // convertCoordinate(coordinate) {
-    //     const serverAxisLength = 1440;
-    //     const segmentServerAxis = 1 / serverAxisLength;
-    //
-    //     const newAxisLength = this.canvas.width;
-    //     const segmentNewAxis = segmentServerAxis * (1 / newAxisLength);
-    //
-    //     coordinate *= segmentNewAxis;
-    // }
+    convertCoordinate(coordinate: number) {
+        const serverAxisLength = 1440;
+        const segmentServerAxis = 1 / serverAxisLength;
+
+        const newAxisLength = this.canvas.width;
+        const segmentNewAxis = segmentServerAxis * (1 / newAxisLength);
+
+        return coordinate * segmentNewAxis;
+    }
 }
