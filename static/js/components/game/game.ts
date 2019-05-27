@@ -81,7 +81,7 @@ export default class Game {
         this.ghostRightImg = (document.getElementById('ghost-right-sprite') as HTMLImageElement);
         this.heartImg = (document.getElementById('heart-sprite') as HTMLImageElement);
 
-        this.deltaX = this.ghostLeftImg.width / 4;  //  для изменения стейтов
+        this.deltaX = this.ghostLeftImg.width / 2;  //  для изменения стейтов
 
         this.symbolLR = document.getElementById('symbol_LR');
         this.symbolTD = document.getElementById('symbol_TD');
@@ -144,24 +144,25 @@ export default class Game {
             console.log('в новом стейте столько: '+ state.Objects.items.length);
 
             if (this.state.ghosts.length === state.Objects.items.length) {
-                console.log('количество призраков одинаковое');
                 for (let i = 0; i < state.Objects.items.length; i++) {
                     if (Math.abs(state.Objects.items[i].x - this.state.ghosts[i].x) >= this.deltaX) {
                         this.state.ghosts[i] = state.Objects.items[i];
+                        console.log('reset');
                     }
                 }
             } else if (this.state.ghosts.length < state.Objects.items.length && state.Objects.items.length === 2) {
-
                 this.state.ghosts.push(state.Objects.items[1]);
                 for (let i = 0; i < state.Objects.items.length; i++) {
                     if (Math.abs(state.Objects.items[i].x - this.state.ghosts[i].x) >= this.deltaX) {
                         this.state.ghosts[i] = state.Objects.items[i];
+                        console.log('reset');
                     }
                 }
             } else if (this.state.ghosts.length > state.Objects.items.length && state.Objects.items.length === 1) {
                 this.state.ghosts.splice(0, 1);
                 if (Math.abs(state.Objects.items[0].x - this.state.ghosts[0].x) >= this.deltaX) {
                     this.state.ghosts[0] = state.Objects.items[0];
+                    console.log('reset');
                 }
             }
 
@@ -575,7 +576,7 @@ export default class Game {
     }
 
     moveGhost(ghost: { x: number; speed: number; }, dt: number) {
-        ghost.x += ghost.speed * dt;
+        ghost.x += (ghost.speed) * dt;
     }
 
     /*
