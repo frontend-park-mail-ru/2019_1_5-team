@@ -81,8 +81,6 @@ export default class Game {
         this.ghostRightImg = (document.getElementById('ghost-right-sprite') as HTMLImageElement);
         this.heartImg = (document.getElementById('heart-sprite') as HTMLImageElement);
 
-        this.deltaX = this.ghostLeftImg.width / 2;  //  для изменения стейтов
-
         this.symbolLR = document.getElementById('symbol_LR');
         this.symbolTD = document.getElementById('symbol_TD');
         this.symbolDTD = document.getElementById('symbol_DTD');
@@ -117,6 +115,8 @@ export default class Game {
     }
 
     setState(state: { Players: { score: Number, x?: number, id?: Number, hp?: number }[]; Objects: { items: any; }; }) {
+        this.deltaX = this.ghostLeftImg.width / 2;
+
         console.log(state);
         if (!this.isSet) {  // сеттим стейт в первый раз
             this.state = {
@@ -143,11 +143,15 @@ export default class Game {
             console.log('в моем стейте столько призраков: ' + this.state.ghosts.length);
             console.log('в новом стейте столько: '+ state.Objects.items.length);
 
+            console.log('дельта: ' + this.deltaX);
+
             if (this.state.ghosts.length === state.Objects.items.length) {
                 for (let i = 0; i < state.Objects.items.length; i++) {
                     if (Math.abs(state.Objects.items[i].x - this.state.ghosts[i].x) >= this.deltaX) {
                         this.state.ghosts[i] = state.Objects.items[i];
                         console.log('reset');
+                    } else {
+                        console.log('no need to reset');
                     }
                 }
             } else if (this.state.ghosts.length < state.Objects.items.length && state.Objects.items.length === 2) {
@@ -156,6 +160,8 @@ export default class Game {
                     if (Math.abs(state.Objects.items[i].x - this.state.ghosts[i].x) >= this.deltaX) {
                         this.state.ghosts[i] = state.Objects.items[i];
                         console.log('reset');
+                    } else {
+                        console.log('no need to reset');
                     }
                 }
             } else if (this.state.ghosts.length > state.Objects.items.length && state.Objects.items.length === 1) {
@@ -163,6 +169,8 @@ export default class Game {
                 if (Math.abs(state.Objects.items[0].x - this.state.ghosts[0].x) >= this.deltaX) {
                     this.state.ghosts[0] = state.Objects.items[0];
                     console.log('reset');
+                } else {
+                    console.log('no need to reset');
                 }
             }
 
@@ -576,7 +584,14 @@ export default class Game {
     }
 
     moveGhost(ghost: { x: number; speed: number; }, dt: number) {
-        ghost.x += (ghost.speed) * dt;
+        let speedDelta = 0;
+        if (ghost.speed > 0) {
+            speedDelta = 30;
+        } else {
+            speedDelta = - 30;
+        }
+
+        ghost.x += (ghost.speed + speedDelta) * dt;  // TODO(): вынести в константу разность скоростей
     }
 
     /*
