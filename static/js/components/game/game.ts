@@ -140,11 +140,28 @@ export default class Game {
 
             this.isSet = true;
         } else {
+            console.log('в моем стейте столько призраков: ' + this.state.ghosts.length);
+            console.log('в новом стейте столько: '+ state.Objects.items.length);
+
             if (this.state.ghosts.length === state.Objects.items.length) {
+                console.log('количество призраков одинаковое');
                 for (let i = 0; i < state.Objects.items.length; i++) {
-                    if (Math.abs(state.Objects.items[i].x - this.state.ghosts[i].x) < this.deltaX) {
-                        return;
+                    if (Math.abs(state.Objects.items[i].x - this.state.ghosts[i].x) >= this.deltaX) {
+                        this.state.ghosts[i] = state.Objects.items[i];
                     }
+                }
+            } else if (this.state.ghosts.length < state.Objects.items.length && state.Objects.items.length === 2) {
+
+                this.state.ghosts.push(state.Objects.items[1]);
+                for (let i = 0; i < state.Objects.items.length; i++) {
+                    if (Math.abs(state.Objects.items[i].x - this.state.ghosts[i].x) >= this.deltaX) {
+                        this.state.ghosts[i] = state.Objects.items[i];
+                    }
+                }
+            } else if (this.state.ghosts.length > state.Objects.items.length && state.Objects.items.length === 1) {
+                this.state.ghosts.splice(0, 1);
+                if (Math.abs(state.Objects.items[0].x - this.state.ghosts[0].x) >= this.deltaX) {
+                    this.state.ghosts[0] = state.Objects.items[0];
                 }
             }
 
@@ -155,8 +172,6 @@ export default class Game {
             this.state.Players[1].x = state.Players[1].x;
             this.state.Players[1].hp = state.Players[1].hp;
             this.state.Players[1].score = state.Players[1].score;
-
-            this.state.ghosts = state.Objects.items;
         }
         
         this.gameLoop();
@@ -560,7 +575,6 @@ export default class Game {
     }
 
     moveGhost(ghost: { x: number; speed: number; }, dt: number) {
-        dt *= 1000 / 975;
         ghost.x += ghost.speed * dt;
     }
 
