@@ -6,6 +6,7 @@ import detectMobile from '../detectMobile';
 import { DEFAULT_GHOST_SPEED, DEFAULT_GHOST_DAMAGE, PLAYER_INITIAL_HP } from '../constants';
 import { SCORE_FOR_SYMBOL, SCORE_FOR_GHOST } from '../constants';
 import { GHOST_SPEED_DELTA } from '../constants';
+import launchFullscreen, {exitFullscreen} from '../../libs/fullscreenApi';
 
 import EventBus from '../../libs/eventBus';
 import type = Mocha.utils.type;
@@ -117,6 +118,14 @@ export default class Game {
                 gameTime: 0,
                 isGameOver: false
             };
+            if (detectMobile.detect()) {
+                //как-то надо нормально написать :)
+
+                launchFullscreen(this.canvas);
+                screen.orientation.lock('landscape');
+
+                // и выйти из фуллскрин при завершении игры
+            }
             this.gameLoop();
         } else {
             console.log('creating ws');
@@ -243,6 +252,10 @@ export default class Game {
         console.log('destroy');
         if (this.requestID) {
             cancelAnimationFrame(this.requestID);
+        }
+        if (detectMobile.detect()) {
+            exitFullscreen();
+            screen.orientation.unlock();
         }
         this.recognizer.destroyRecognizer();
 

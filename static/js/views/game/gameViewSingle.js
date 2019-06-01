@@ -1,8 +1,6 @@
 import template from './gameView.tmpl.xml';
 import View from '../../libs/views';
 import userBlock from '../../components/userBlock/userBlock';
-import launchFullscreen, {exitFullscreen} from '../../libs/fullscreenApi';
-
 
 import './game.scss';
 
@@ -35,13 +33,6 @@ export default class gameView extends View {
         this.localEventBus.callEvent('getUserDataForGame');
 
         this.canvas = document.getElementById('canvas');
-
-        //как-то надо нормально написать :)
-
-        launchFullscreen(this.canvas);
-        screen.orientation.lock("landscape");
-
-        // и выйти из фуллскрин при завершении игры
 
         return this;
     }
