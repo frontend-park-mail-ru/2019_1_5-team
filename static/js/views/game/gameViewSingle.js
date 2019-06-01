@@ -1,8 +1,10 @@
 import template from './gameView.tmpl.xml';
 import View from '../../libs/views';
 import userBlock from '../../components/userBlock/userBlock';
+import launchFullscreen from '../../libs/fullscreenApi';
 
 import './game.scss';
+
 
 export default class gameView extends View {
     constructor(eventBus) {
@@ -30,6 +32,12 @@ export default class gameView extends View {
     render(root, data = {}) {
         super.render(root, data);
         this.localEventBus.callEvent('getUserDataForGame');
+
+        this.canvas = document.getElementById('canvas');
+
+        launchFullscreen(this.canvas);
+        screen.orientation.lock('landscape');
+
         return this;
     }
 }

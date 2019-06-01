@@ -1,6 +1,7 @@
 import template from './gameView.tmpl.xml';
 import View from '../../libs/views';
 import userBlock from '../../components/userBlock/userBlock';
+import launchFullscreen from '../../libs/fullscreenApi';
 
 import './game.scss';
 
@@ -29,6 +30,9 @@ export default class gameViewMulti extends View {
         menuButton.addEventListener('click', () => {
             this.localEventBus.callEvent('stopGameManualy');
         });
+        launchFullscreen(this.canvas);
+        screen.orientation.lock('landscape');
+
         this.localEventBus.callEvent('startGame'); 
         return this; 
     }

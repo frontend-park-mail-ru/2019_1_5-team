@@ -1,6 +1,7 @@
 import Game from '../components/game/game';
 import ModalWindow from '../components/modalWindow/modalWindow';
 import EventBus from '../libs/eventBus';
+import { exitFullscreen } from '../libs/fullscreenApi';
 
 /**
  * STATE - состояние игры
@@ -46,6 +47,7 @@ export default class gameOnlineMulti {
 
     stopGame() {
         this.scene.destroy();
+        exitFullscreen();
     }
 
     onStart() {
