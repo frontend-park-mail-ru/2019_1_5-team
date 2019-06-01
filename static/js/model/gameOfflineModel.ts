@@ -2,6 +2,7 @@ import Game from '../components/game/game';
 import api from '../libs/api';
 import { ANAUTH_RESPONSE } from '../components/constants';
 import EventBus from '../libs/eventBus';
+import { exitFullscreen } from '../libs/fullscreenApi';
 
 interface IResponseGame extends Response {
     error?: string;
@@ -47,6 +48,7 @@ export default class gameOfflineModel {
 
     stopGame() {
         this.scene.destroy();
+        exitFullscreen();
     }
 
     onGameOver() {

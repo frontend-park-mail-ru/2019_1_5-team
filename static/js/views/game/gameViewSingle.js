@@ -1,6 +1,7 @@
 import template from './gameView.tmpl.xml';
 import View from '../../libs/views';
 import userBlock from '../../components/userBlock/userBlock';
+import launchFullscreen from '../../libs/fullscreenApi';
 
 import './game.scss';
 
@@ -34,6 +35,12 @@ export default class gameView extends View {
 
         this.canvas = document.getElementById('canvas');
 
+<<<<<<< HEAD
+=======
+        launchFullscreen(this.canvas);
+        screen.orientation.lock('landscape');
+
+>>>>>>> a9513d613e117c065cbd55ac377b4d4c13e6416b
         return this;
     }
 }

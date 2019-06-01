@@ -94,7 +94,8 @@ export const EVENT_LIST_GAME_SINGLE = [
     'updateState',
     'callingGameWS',
     'sendButton',
-    'close'
+    'close',
+    'closeFull'
 ];
 
 export const EVENT_LIST_GAME_MULTI = [
@@ -112,7 +113,8 @@ export const EVENT_LIST_GAME_MULTI = [
     'callingGameWS',
     'sendButton',
     'close', 
-    'gameOverWS'
+    'gameOverWS',
+    'closeFull'
 ];
 
 export const NETWORK_ADRESS = 'https://5factorial.tech';
