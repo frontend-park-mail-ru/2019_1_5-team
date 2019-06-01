@@ -33,14 +33,10 @@ export default class gameView extends View {
         super.render(root, data);
         this.localEventBus.callEvent('getUserDataForGame');
 
-        this.canvas = document.getElementById('canvas');
-
-<<<<<<< HEAD
-=======
+        this.canvas = document.getElementsByClassName('temp_class_canvas')[0];
         launchFullscreen(this.canvas);
         screen.orientation.lock('landscape');
 
->>>>>>> a9513d613e117c065cbd55ac377b4d4c13e6416b
         return this;
     }
 }
